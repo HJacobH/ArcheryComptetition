@@ -23,7 +23,6 @@ namespace ArcheryComptetition
             this.Show();
 
             LoadFiles();
-            //LoadData();
         }
 
         private void LoadFiles()
@@ -72,7 +71,11 @@ namespace ArcheryComptetition
         {
             if (listBox1.SelectedItem != null)
             {
-
+                this.Hide();
+                ArcherForm archerForm = new ArcherForm(listBox1.SelectedItem.ToString());
+                archerForm.ShowDialog();
+                archerForm = null;
+                this.Show();
             }
         }
     }
