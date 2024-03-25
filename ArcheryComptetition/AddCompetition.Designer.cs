@@ -44,7 +44,7 @@
             pridatBtn.Name = "pridatBtn";
             pridatBtn.Size = new Size(75, 23);
             pridatBtn.TabIndex = 0;
-            pridatBtn.Text = "Pridat";
+            pridatBtn.Text = "OK";
             pridatBtn.UseVisualStyleBackColor = true;
             pridatBtn.Click += button1_Click;
             // 

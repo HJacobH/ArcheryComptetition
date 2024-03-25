@@ -28,22 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            listBox1 = new ListBox();
+            udalostiListBox = new ListBox();
             addBtn = new Button();
             editBtn = new Button();
             rmvBtn = new Button();
             exitBtn = new Button();
             SuspendLayout();
             // 
-            // listBox1
+            // udalostiListBox
             // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(12, 12);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(695, 424);
-            listBox1.TabIndex = 0;
-            listBox1.DoubleClick += listBox1_DoubleClick;
+            udalostiListBox.FormattingEnabled = true;
+            udalostiListBox.ItemHeight = 15;
+            udalostiListBox.Location = new Point(12, 12);
+            udalostiListBox.Name = "udalostiListBox";
+            udalostiListBox.Size = new Size(695, 424);
+            udalostiListBox.TabIndex = 0;
+            udalostiListBox.DoubleClick += listBox1_DoubleClick;
             // 
             // addBtn
             // 
@@ -63,6 +63,7 @@
             editBtn.TabIndex = 2;
             editBtn.Text = "Edit";
             editBtn.UseVisualStyleBackColor = true;
+            editBtn.Click += editBtn_Click;
             // 
             // rmvBtn
             // 
@@ -72,6 +73,7 @@
             rmvBtn.TabIndex = 3;
             rmvBtn.Text = "Remove";
             rmvBtn.UseVisualStyleBackColor = true;
+            rmvBtn.Click += rmvBtn_Click;
             // 
             // exitBtn
             // 
@@ -92,7 +94,7 @@
             Controls.Add(rmvBtn);
             Controls.Add(editBtn);
             Controls.Add(addBtn);
-            Controls.Add(listBox1);
+            Controls.Add(udalostiListBox);
             Name = "Form1";
             Text = "Form1";
             ResumeLayout(false);
@@ -100,7 +102,7 @@
 
         #endregion
 
-        private ListBox listBox1;
+        private ListBox udalostiListBox;
         private Button addBtn;
         private Button editBtn;
         private Button rmvBtn;

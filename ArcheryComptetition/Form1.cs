@@ -11,15 +11,15 @@ namespace ArcheryComptetition
         {
             InitializeComponent();
             LoadFiles();
-            //LoadData();
         }
+
+        string directoryPath = Directory.GetCurrentDirectory();
 
         private void addBtn_Click(object sender, EventArgs e)
         {
             this.Hide();
-            AddCompetition addCompetition = new AddCompetition();
+            AddCompetition addCompetition = new AddCompetition(true, "");
             addCompetition.ShowDialog();
-            addCompetition = null;
             this.Show();
 
             LoadFiles();
@@ -27,9 +27,8 @@ namespace ArcheryComptetition
 
         private void LoadFiles()
         {
-            listBox1.Items.Clear();
+            udalostiListBox.Items.Clear();
 
-            string directoryPath = Directory.GetCurrentDirectory();
             string[] files = Directory.GetFiles(directoryPath, "*.xml");
 
             foreach (string filePath in files)
@@ -56,7 +55,7 @@ namespace ArcheryComptetition
                     else if (node.Name == "Pocet")
                     {
                         zaznam += ", " + node.InnerText;
-                        listBox1.Items.Add(zaznam);
+                        udalostiListBox.Items.Add(zaznam);
                     }
                 }
             }
@@ -69,13 +68,44 @@ namespace ArcheryComptetition
 
         private void listBox1_DoubleClick(object sender, EventArgs e)
         {
-            if (listBox1.SelectedItem != null)
+            if (udalostiListBox.SelectedItem != null)
             {
                 this.Hide();
-                ArcherForm archerForm = new ArcherForm(listBox1.SelectedItem.ToString());
+                ArcherForm archerForm = new ArcherForm(udalostiListBox.SelectedItem.ToString());
                 archerForm.ShowDialog();
-                archerForm = null;
                 this.Show();
+            }
+        }
+
+        private void rmvBtn_Click(object sender, EventArgs e)
+        {
+            if (udalostiListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an item");
+            }
+            else
+            {
+                string[] split = udalostiListBox.SelectedItem.ToString().Split(',');
+                udalostiListBox.Items.Remove(udalostiListBox.SelectedItem);
+                File.Delete(directoryPath + @"\" + split[0] + ".xml");
+            }
+        }
+
+        private void editBtn_Click(object sender, EventArgs e)
+        {
+            if (udalostiListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an item");
+            }
+            else
+            {
+                string[] split = udalostiListBox.SelectedItem.ToString().Split(',');
+                this.Hide();
+                AddCompetition addCompetition = new AddCompetition(false, split[0]);
+                addCompetition.ShowDialog();
+                this.Show();
+
+                LoadFiles();
             }
         }
     }
