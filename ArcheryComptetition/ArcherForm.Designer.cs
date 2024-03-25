@@ -32,6 +32,8 @@
             nazevLabel = new Label();
             backBtn = new Button();
             addButton = new Button();
+            editButton = new Button();
+            removeButton = new Button();
             SuspendLayout();
             // 
             // archerListBox
@@ -72,11 +74,32 @@
             addButton.UseVisualStyleBackColor = true;
             addButton.Click += addButton_Click;
             // 
+            // editButton
+            // 
+            editButton.Location = new Point(324, 78);
+            editButton.Name = "editButton";
+            editButton.Size = new Size(75, 23);
+            editButton.TabIndex = 4;
+            editButton.Text = "Edit";
+            editButton.UseVisualStyleBackColor = true;
+            // 
+            // removeButton
+            // 
+            removeButton.Location = new Point(324, 107);
+            removeButton.Name = "removeButton";
+            removeButton.Size = new Size(75, 23);
+            removeButton.TabIndex = 5;
+            removeButton.Text = "Remove";
+            removeButton.UseVisualStyleBackColor = true;
+            removeButton.Click += removeButton_Click;
+            // 
             // ArcherForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(411, 450);
+            Controls.Add(removeButton);
+            Controls.Add(editButton);
             Controls.Add(addButton);
             Controls.Add(backBtn);
             Controls.Add(nazevLabel);
@@ -93,5 +116,7 @@
         private Label nazevLabel;
         private Button backBtn;
         private Button addButton;
+        private Button editButton;
+        private Button removeButton;
     }
 }

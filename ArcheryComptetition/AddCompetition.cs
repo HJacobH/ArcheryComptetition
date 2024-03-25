@@ -86,7 +86,7 @@ namespace ArcheryComptetition
 
                 xmlDoc.Save(fileName);
 
-                cleanTextBoxes();
+                CleanTextBoxes();
                 MessageBox.Show("Zaznam byl pridan");
             }
             else
@@ -113,12 +113,12 @@ namespace ArcheryComptetition
                 xmlDoc.Save(nazevTextBox.Text + ".xml");
                 File.Delete(Directory.GetCurrentDirectory() + @"\" + selectedCompetition + ".xml");
 
-                cleanTextBoxes();
+                CleanTextBoxes();
                 MessageBox.Show("Zaznam byl upraven");
             }
         }
 
-        private void cleanTextBoxes()
+        private void CleanTextBoxes()
         {
             nazevTextBox.Text = "";
             lokaceTextBox.Text = "";
