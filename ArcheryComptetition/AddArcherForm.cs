@@ -15,10 +15,30 @@ namespace ArcheryComptetition
     public partial class AddArcherForm : Form
     {
         string nazevSouteze = "";
-        public AddArcherForm(string nazevSouteze)
+        bool add = false;
+        int selectedArcher = 0;
+
+        public AddArcherForm(string nazev, bool add, int index)
         {
             InitializeComponent();
-            this.nazevSouteze = nazevSouteze;
+            string[] split = nazev.Split(',');
+            this.nazevSouteze = split[0];
+            this.add = add;
+            this.selectedArcher = index + 1;
+
+            if(!add) 
+            { 
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(nazevSouteze + ".xml");
+
+                XmlNode archerNode = xmlDoc.SelectSingleNode("/" + nazevSouteze + $"/Archer[{selectedArcher}]");
+
+                jmenoTextBox.Text = archerNode.SelectSingleNode("Jmeno").InnerText;
+                prijmeniTextBox.Text = archerNode.SelectSingleNode("Prijmeni").InnerText;
+                vekTextBox.Text = archerNode.SelectSingleNode("Vek").InnerText;
+                narodnostTextBox.Text = archerNode.SelectSingleNode("Narodnost").InnerText;
+                umisteniTextBox.Text = archerNode.SelectSingleNode("Umisteni").InnerText;
+            }
         }
 
         private void okButton_Click(object sender, EventArgs e)
@@ -29,22 +49,63 @@ namespace ArcheryComptetition
                 return;
             }
 
-            string[] split = nazevSouteze.Split(',');
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(split[0] + ".xml");
+            if (add)
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(nazevSouteze + ".xml");
 
-            XmlElement archerElemnt = xmlDoc.CreateElement("Archer");
-            Archer newArcher = new Archer(jmenoTextBox.Text, prijmeniTextBox.Text, Int32.Parse(vekTextBox.Text), narodnostTextBox.Text, Int32.Parse(umisteniTextBox.Text));
-            XmlAttribute attribute = xmlDoc.CreateAttribute("ArcherAtribute");
-            attribute.Value = "atribute?";
-            
-            XmlNode parent = xmlDoc.SelectSingleNode("//" + split[0]);
-            
-            archerElemnt.InnerText = newArcher.ToString();
-            parent.AppendChild(archerElemnt);
+                XmlElement archerElemnt = xmlDoc.CreateElement("Archer");
+                Archer newArcher = new Archer(jmenoTextBox.Text, prijmeniTextBox.Text, Int32.Parse(vekTextBox.Text), narodnostTextBox.Text, Int32.Parse(umisteniTextBox.Text));
+                XmlAttribute attribute = xmlDoc.CreateAttribute("ArcherAtribute");
+                attribute.Value = "atribute?";
 
-            xmlDoc.Save(nazevSouteze + ".xml");
-            CleanTextBoxes();
+                XmlNode parent = xmlDoc.SelectSingleNode("//" + nazevSouteze);
+
+                parent.AppendChild(archerElemnt);
+
+                XmlElement nameElement = xmlDoc.CreateElement("Jmeno");
+                nameElement.InnerText = jmenoTextBox.Text;
+                archerElemnt.AppendChild(nameElement);
+
+                XmlElement prijmeniElement = xmlDoc.CreateElement("Prijmeni");
+                prijmeniElement.InnerText = prijmeniTextBox.Text;
+                archerElemnt.AppendChild(prijmeniElement);
+
+                XmlElement vekElement = xmlDoc.CreateElement("Vek");
+                vekElement.InnerText = vekTextBox.Text;
+                archerElemnt.AppendChild(vekElement);
+
+                XmlElement narodnostElement = xmlDoc.CreateElement("Narodnost");
+                narodnostElement.InnerText = narodnostTextBox.Text;
+                archerElemnt.AppendChild(narodnostElement);
+
+                XmlElement umisteniElement = xmlDoc.CreateElement("Umisteni");
+                umisteniElement.InnerText = umisteniTextBox.Text;
+                archerElemnt.AppendChild(umisteniElement);
+
+                xmlDoc.Save(nazevSouteze + ".xml");
+                CleanTextBoxes();
+                MessageBox.Show("Zaznam byl pridan");
+            }
+            else
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(nazevSouteze + ".xml");
+
+                XmlNode archerNode = xmlDoc.SelectSingleNode("/" + nazevSouteze + $"/Archer[{selectedArcher}]");
+
+                archerNode.SelectSingleNode("Jmeno").InnerText = jmenoTextBox.Text;
+                archerNode.SelectSingleNode("Prijmeni").InnerText = prijmeniTextBox.Text;
+                archerNode.SelectSingleNode("Vek").InnerText = vekTextBox.Text;
+                archerNode.SelectSingleNode("Narodnost").InnerText = narodnostTextBox.Text;
+                archerNode.SelectSingleNode("Umisteni").InnerText = umisteniTextBox.Text;
+
+                xmlDoc.Save(nazevSouteze + ".xml");                
+                
+
+                CleanTextBoxes();
+                MessageBox.Show("Zaznam byl upraven");
+            }
         }
 
         private void CleanTextBoxes()

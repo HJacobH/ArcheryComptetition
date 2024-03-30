@@ -15,11 +15,14 @@ namespace ArcheryComptetition
     public partial class ArcherForm : Form
     {
         string nazevSouteze = "";
+        string plnyNazev = "";
         public ArcherForm(string nazev)
         {
             InitializeComponent();
-            this.nazevSouteze = nazev;
-            nazevLabel.Text = nazevSouteze;
+            this.plnyNazev = nazev;
+            string[] split = nazev.Split(',');
+            this.nazevSouteze = split[0];
+            nazevLabel.Text = plnyNazev;
 
             LoadFiles();
         }
@@ -32,8 +35,7 @@ namespace ArcheryComptetition
         private void addButton_Click(object sender, EventArgs e)
         {
             this.Hide();
-            string[] split = nazevSouteze.Split(',');
-            AddArcherForm addArcherForm = new AddArcherForm(split[0]);
+            AddArcherForm addArcherForm = new AddArcherForm(nazevSouteze, true, 0);
             addArcherForm.ShowDialog();
             this.Show();
 
@@ -45,8 +47,10 @@ namespace ArcheryComptetition
             archerListBox.Items.Clear();
 
             XmlDocument xmlDoc = new XmlDocument();
-            string[] split = nazevSouteze.Split(',');
-            xmlDoc.Load(split[0] + ".xml");
+            if(xmlDoc != null)
+            {
+                xmlDoc.Load(nazevSouteze + ".xml");
+            }
 
             XmlElement root = xmlDoc.DocumentElement;
 
@@ -67,24 +71,41 @@ namespace ArcheryComptetition
             }
             else
             {
-                string[] split = archerListBox.SelectedItem.ToString().Split(',');
-                archerListBox.Items.Remove(archerListBox.SelectedItem);
-
                 XmlDocument xmlDoc = new XmlDocument();
-                string[] splits = nazevSouteze.Split(',');
-                xmlDoc.Load(splits[0] + ".xml");
+                xmlDoc.Load(nazevSouteze + ".xml");
 
-                //needs fixing
-                XmlNodeList nodeList = xmlDoc.GetElementsByTagName(archerListBox.SelectedItem.ToString());
+                XmlNode nodeToDelete = xmlDoc.SelectSingleNode("/" + nazevSouteze + $"/Archer[{archerListBox.SelectedIndex + 1}]");
 
-                foreach(XmlNode node in nodeList)
+                if (nodeToDelete != null)
                 {
-                    XmlNode parentNode = node.ParentNode;
+                    nodeToDelete.ParentNode.RemoveChild(nodeToDelete);
 
-                    parentNode.RemoveChild(node);
+                    xmlDoc.Save(nazevSouteze + ".xml");
+
+                    MessageBox.Show("Zaznam odstranen");
+                    LoadFiles();
                 }
+                else
+                {
+                    MessageBox.Show("error");
+                }
+            }
+        }
 
-                xmlDoc.Save(splits[0] + ".xml");
+        private void editButton_Click(object sender, EventArgs e)
+        {
+            if (archerListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an item");
+            }
+            else
+            {
+                this.Hide();
+                AddArcherForm editArcher = new AddArcherForm(nazevSouteze, false, archerListBox.SelectedIndex);
+                editArcher.ShowDialog();
+                this.Show();
+
+                LoadFiles();
             }
         }
     }
