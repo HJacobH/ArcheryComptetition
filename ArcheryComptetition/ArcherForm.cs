@@ -16,6 +16,9 @@ namespace ArcheryComptetition
     {
         string nazevSouteze = "";
         string plnyNazev = "";
+        int pocetUcastniku = 0;
+        int aktualniPocetUcastniku = 0;
+
         public ArcherForm(string nazev)
         {
             InitializeComponent();
@@ -23,6 +26,7 @@ namespace ArcheryComptetition
             string[] split = nazev.Split(',');
             this.nazevSouteze = split[0];
             nazevLabel.Text = plnyNazev;
+            this.pocetUcastniku = int.Parse(split[2]);
 
             LoadFiles();
         }
@@ -35,7 +39,7 @@ namespace ArcheryComptetition
         private void addButton_Click(object sender, EventArgs e)
         {
             this.Hide();
-            AddArcherForm addArcherForm = new AddArcherForm(nazevSouteze, true, 0);
+            AddArcherForm addArcherForm = new AddArcherForm(nazevSouteze, true, 0, pocetUcastniku, aktualniPocetUcastniku);
             addArcherForm.ShowDialog();
             this.Show();
 
@@ -45,6 +49,8 @@ namespace ArcheryComptetition
         private void LoadFiles()
         {
             archerListBox.Items.Clear();
+
+            aktualniPocetUcastniku = 0;
 
             XmlDocument xmlDoc = new XmlDocument();
             if(xmlDoc != null)
@@ -59,6 +65,7 @@ namespace ArcheryComptetition
                 if (node.Name == "Archer")
                 {
                     archerListBox.Items.Add(node.InnerText);
+                    aktualniPocetUcastniku++;
                 }
             }
         }
@@ -81,6 +88,7 @@ namespace ArcheryComptetition
                     nodeToDelete.ParentNode.RemoveChild(nodeToDelete);
 
                     xmlDoc.Save(nazevSouteze + ".xml");
+                    aktualniPocetUcastniku--;
 
                     MessageBox.Show("Zaznam odstranen");
                     LoadFiles();
@@ -101,7 +109,7 @@ namespace ArcheryComptetition
             else
             {
                 this.Hide();
-                AddArcherForm editArcher = new AddArcherForm(nazevSouteze, false, archerListBox.SelectedIndex);
+                AddArcherForm editArcher = new AddArcherForm(nazevSouteze, false, archerListBox.SelectedIndex, pocetUcastniku, aktualniPocetUcastniku);
                 editArcher.ShowDialog();
                 this.Show();
 

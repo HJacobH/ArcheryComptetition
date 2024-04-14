@@ -17,16 +17,26 @@ namespace ArcheryComptetition
         string nazevSouteze = "";
         bool add = false;
         int selectedArcher = 0;
+        int maxPocetUcastniku = 0;
+        int aktualniPocetUcastniku = 0;
 
-        public AddArcherForm(string nazev, bool add, int index)
+        public AddArcherForm(string nazev, bool add, int index, int maxPocetUcastniku, int aktualniPocetUcastniku)
         {
             InitializeComponent();
             string[] split = nazev.Split(',');
             this.nazevSouteze = split[0];
             this.add = add;
             this.selectedArcher = index + 1;
+            this.maxPocetUcastniku = maxPocetUcastniku;
+            this.aktualniPocetUcastniku = aktualniPocetUcastniku;
 
-            if(!add) 
+            if(aktualniPocetUcastniku >= maxPocetUcastniku && add)
+            {
+                MessageBox.Show("Kapacita ucastniku byla naplnena");
+                return;
+            }
+
+            if (!add) 
             { 
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(nazevSouteze + ".xml");
@@ -51,6 +61,12 @@ namespace ArcheryComptetition
 
             if (add)
             {
+                if (aktualniPocetUcastniku >= maxPocetUcastniku)
+                {
+                    MessageBox.Show("Kapacita ucastniku byla naplnena");
+                    return;
+                }
+
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(nazevSouteze + ".xml");
 
@@ -86,6 +102,7 @@ namespace ArcheryComptetition
                 xmlDoc.Save(nazevSouteze + ".xml");
                 CleanTextBoxes();
                 MessageBox.Show("Zaznam byl pridan");
+                aktualniPocetUcastniku++;
             }
             else
             {

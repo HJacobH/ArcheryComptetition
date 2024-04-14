@@ -110,8 +110,37 @@ namespace ArcheryComptetition
                         node.InnerText = pocetTextBox.Text;
                     }
                 }
-                xmlDoc.Save(nazevTextBox.Text + ".xml");
-                File.Delete(Directory.GetCurrentDirectory() + @"\" + selectedCompetition + ".xml");
+                if (selectedCompetition == nazevTextBox.Text)
+                {
+                    xmlDoc.Save(nazevTextBox.Text + ".xml");
+                }
+                else
+                {
+                    File.Delete(Directory.GetCurrentDirectory() + @"\" + selectedCompetition + ".xml");
+
+                    XmlDocument xmlDocc = new XmlDocument();
+                    XmlDeclaration xmlDeclaration = xmlDocc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                    xmlDocc.AppendChild(xmlDeclaration);
+
+                    XmlElement rooot = xmlDocc.CreateElement(nazevTextBox.Text);
+                    xmlDocc.AppendChild(rooot);
+
+                    string fileName = nazevTextBox.Text + ".xml";
+
+                    XmlElement nazevElement = xmlDocc.CreateElement("Nazev");
+                    nazevElement.InnerText = nazevTextBox.Text;
+                    rooot.AppendChild(nazevElement);
+
+                    XmlElement lokaceElement = xmlDocc.CreateElement("Lokace");
+                    lokaceElement.InnerText = lokaceTextBox.Text;
+                    rooot.AppendChild(lokaceElement);
+
+                    XmlElement pocetElement = xmlDocc.CreateElement("Pocet");
+                    pocetElement.InnerText = pocetTextBox.Text;
+                    rooot.AppendChild(pocetElement);
+
+                    xmlDocc.Save(fileName);
+                }
 
                 CleanTextBoxes();
                 MessageBox.Show("Zaznam byl upraven");
