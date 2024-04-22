@@ -30,6 +30,11 @@ namespace ArcheryComptetition
             this.maxPocetUcastniku = maxPocetUcastniku;
             this.aktualniPocetUcastniku = aktualniPocetUcastniku;
 
+            foreach (var item in Enum.GetValues(typeof(ArrowTypes)))
+            {
+                sipComboBox.Items.Add(item);
+            }
+
             if(aktualniPocetUcastniku >= maxPocetUcastniku && add)
             {
                 MessageBox.Show("Kapacita ucastniku byla naplnena");
@@ -48,14 +53,20 @@ namespace ArcheryComptetition
                 vekTextBox.Text = archerNode.SelectSingleNode("Vek").InnerText;
                 narodnostTextBox.Text = archerNode.SelectSingleNode("Narodnost").InnerText;
                 umisteniTextBox.Text = archerNode.SelectSingleNode("Umisteni").InnerText;
+                lukTextBox.Text = archerNode.SelectSingleNode("Luk").InnerText;
+                sipComboBox.SelectedItem = ArrowTypesInfo.GetEnum(archerNode.SelectSingleNode("Sip").InnerText.ToUpper());
+            }
+            else
+            {
+                sipComboBox.SelectedItem = ArrowTypes.WOOD;
             }
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(jmenoTextBox.Text) || string.IsNullOrWhiteSpace(prijmeniTextBox.Text) || string.IsNullOrWhiteSpace(vekTextBox.Text) || string.IsNullOrWhiteSpace(narodnostTextBox.Text) || string.IsNullOrWhiteSpace(umisteniTextBox.Text))
+            if (string.IsNullOrWhiteSpace(jmenoTextBox.Text) || string.IsNullOrWhiteSpace(prijmeniTextBox.Text) || string.IsNullOrWhiteSpace(vekTextBox.Text) || string.IsNullOrWhiteSpace(narodnostTextBox.Text) || string.IsNullOrWhiteSpace(umisteniTextBox.Text) || string.IsNullOrWhiteSpace(lukTextBox.Text))
             {
-                MessageBox.Show("Please fill in all the textboxes.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Vyplnte vsechny textboxy.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -71,7 +82,7 @@ namespace ArcheryComptetition
                 xmlDoc.Load(nazevSouteze + ".xml");
 
                 XmlElement archerElemnt = xmlDoc.CreateElement("Archer");
-                Archer newArcher = new Archer(jmenoTextBox.Text, prijmeniTextBox.Text, Int32.Parse(vekTextBox.Text), narodnostTextBox.Text, Int32.Parse(umisteniTextBox.Text));
+                Archer newArcher = new Archer(jmenoTextBox.Text, prijmeniTextBox.Text, Int32.Parse(vekTextBox.Text), narodnostTextBox.Text, Int32.Parse(umisteniTextBox.Text), lukTextBox.Text, ArrowTypesInfo.GetEnum(sipComboBox.SelectedItem.ToString()));
                 XmlAttribute attribute = xmlDoc.CreateAttribute("ArcherAtribute");
                 attribute.Value = "atribute?";
 
@@ -99,8 +110,16 @@ namespace ArcheryComptetition
                 umisteniElement.InnerText = umisteniTextBox.Text;
                 archerElemnt.AppendChild(umisteniElement);
 
+                XmlElement lukElement = xmlDoc.CreateElement("Luk");
+                lukElement.InnerText = lukTextBox.Text;
+                archerElemnt.AppendChild(lukElement);
+
+                XmlElement sipElement = xmlDoc.CreateElement("Sip");
+                sipElement.InnerText = sipComboBox.SelectedItem.ToString();
+                archerElemnt.AppendChild(sipElement);
+
                 xmlDoc.Save(nazevSouteze + ".xml");
-                CleanTextBoxes();
+                ClearTextBoxes();
                 MessageBox.Show("Zaznam byl pridan");
                 aktualniPocetUcastniku++;
             }
@@ -116,22 +135,25 @@ namespace ArcheryComptetition
                 archerNode.SelectSingleNode("Vek").InnerText = vekTextBox.Text;
                 archerNode.SelectSingleNode("Narodnost").InnerText = narodnostTextBox.Text;
                 archerNode.SelectSingleNode("Umisteni").InnerText = umisteniTextBox.Text;
+                archerNode.SelectSingleNode("Luk").InnerText = lukTextBox.Text;
+                archerNode.SelectSingleNode("Sip").InnerText = sipComboBox.SelectedItem.ToString();
 
                 xmlDoc.Save(nazevSouteze + ".xml");                
                 
 
-                CleanTextBoxes();
+                ClearTextBoxes();
                 MessageBox.Show("Zaznam byl upraven");
             }
         }
 
-        private void CleanTextBoxes()
+        private void ClearTextBoxes()
         {
-            jmenoTextBox.Text = string.Empty;
-            prijmeniTextBox.Text = string.Empty;
-            vekTextBox.Text = string.Empty;
-            narodnostTextBox.Text = string.Empty;
-            umisteniTextBox.Text = string.Empty;
+            jmenoTextBox.Clear();
+            prijmeniTextBox.Clear();
+            vekTextBox.Clear();
+            narodnostTextBox.Clear();
+            umisteniTextBox.Clear();
+            lukTextBox.Clear();
         }
 
         private void stornoButton_Click(object sender, EventArgs e)

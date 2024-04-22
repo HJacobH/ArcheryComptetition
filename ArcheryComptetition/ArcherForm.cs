@@ -38,12 +38,20 @@ namespace ArcheryComptetition
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            AddArcherForm addArcherForm = new AddArcherForm(nazevSouteze, true, 0, pocetUcastniku, aktualniPocetUcastniku);
-            addArcherForm.ShowDialog();
-            this.Show();
+            if (aktualniPocetUcastniku >= pocetUcastniku)
+            {
+                MessageBox.Show("Kapacita ucastniku byla naplnena");
+                return;
+            }
+            else
+            {
+                this.Hide();
+                AddArcherForm addArcherForm = new AddArcherForm(nazevSouteze, true, 0, pocetUcastniku, aktualniPocetUcastniku);
+                addArcherForm.ShowDialog();
+                this.Show();
 
-            LoadFiles();
+                LoadFiles();
+            }            
         }
 
         private void LoadFiles()
@@ -53,7 +61,7 @@ namespace ArcheryComptetition
             aktualniPocetUcastniku = 0;
 
             XmlDocument xmlDoc = new XmlDocument();
-            if(xmlDoc != null)
+            if (xmlDoc != null)
             {
                 xmlDoc.Load(nazevSouteze + ".xml");
             }
@@ -64,7 +72,17 @@ namespace ArcheryComptetition
             {
                 if (node.Name == "Archer")
                 {
-                    archerListBox.Items.Add(node.InnerText);
+                    StringBuilder archerInfo = new StringBuilder();
+
+                    foreach (XmlNode childNode in node.ChildNodes)
+                    {
+                        archerInfo.Append($"{childNode.Name}: {childNode.InnerText} | ");
+                    }
+
+                    string formattedArcherInfo = archerInfo.ToString().TrimEnd('|', ' ');
+
+                    archerListBox.Items.Add(formattedArcherInfo);
+
                     aktualniPocetUcastniku++;
                 }
             }
@@ -115,6 +133,44 @@ namespace ArcheryComptetition
 
                 LoadFiles();
             }
+        }
+
+        private void searchBtn_Click(object sender, EventArgs e)
+        {
+            string searchTerm = searchTextBox.Text.ToLower();
+
+            archerListBox.Items.Clear();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            if (xmlDoc != null)
+            {
+                xmlDoc.Load(nazevSouteze + ".xml");
+            }
+
+            XmlElement root = xmlDoc.DocumentElement;
+
+            foreach (XmlNode node in root.ChildNodes)
+            {
+                if (node.Name == "Archer" && node.InnerText.ToLower().Contains(searchTerm))
+                {
+                    StringBuilder archerInfo = new StringBuilder();
+
+                    foreach (XmlNode childNode in node.ChildNodes)
+                    {
+                        archerInfo.Append($"{childNode.Name}: {childNode.InnerText} | ");
+                    }
+
+                    string formattedArcherInfo = archerInfo.ToString().TrimEnd('|', ' ');
+
+                    archerListBox.Items.Add(formattedArcherInfo);
+                }
+            }
+        }
+
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            searchTextBox.Clear();
+            LoadFiles();
         }
     }
 }

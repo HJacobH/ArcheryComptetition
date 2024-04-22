@@ -1,6 +1,8 @@
 using System;
+using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ArcheryComptetition
@@ -40,24 +42,27 @@ namespace ArcheryComptetition
 
                 XmlElement root = xmlDoc.DocumentElement;
 
-                string zaznam = "";
+                StringBuilder competitionInfo = new StringBuilder();
 
-                foreach (XmlNode node in root.ChildNodes)
+                int enoughInfo = 0;
+
+                foreach (XmlNode childNode in root.ChildNodes)
                 {
-                    if (node.Name == "Nazev")
+                    if(enoughInfo > 2)
                     {
-                        zaznam = node.InnerText;
+                        break;
                     }
-                    else if (node.Name == "Lokace")
+                    else
                     {
-                        zaznam += ", " + node.InnerText;
-                    }
-                    else if (node.Name == "Pocet")
-                    {
-                        zaznam += ", " + node.InnerText;
-                        udalostiListBox.Items.Add(zaznam);
-                    }
+                        competitionInfo.Append($"{childNode.InnerText}, ");
+                        //competitionInfo.Append($"{childNode.Name}: {childNode.InnerText} | ");
+                        enoughInfo++;
+                    }                    
                 }
+
+                string formattedCompetitionInfo = competitionInfo.ToString().TrimEnd('|', ' ');
+
+                udalostiListBox.Items.Add(formattedCompetitionInfo);
             }
         }
 
@@ -107,6 +112,46 @@ namespace ArcheryComptetition
 
                 LoadFiles();
             }
+        }
+
+        private void searchBtn_Click_1(object sender, EventArgs e)
+        {
+            string searchTerm = searchTextBox.Text.ToLower();
+
+            udalostiListBox.Items.Clear();
+
+            string[] files = Directory.GetFiles(directoryPath, "*.xml");
+
+            foreach (string filePath in files)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(filePath);
+                fileName += ".xml";
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.Load(fileName);
+
+                XmlElement root = xmlDoc.DocumentElement;
+
+                string zaznam = "";
+
+                foreach (XmlNode node in root.ChildNodes)
+                {
+                    if (node.Name == "Nazev" || node.Name == "Lokace" || node.Name == "Pocet")
+                    {
+                        zaznam += node.InnerText.ToLower() + ",";
+                    }
+                }
+
+                if (zaznam.Contains(searchTerm))
+                {
+                    udalostiListBox.Items.Add(zaznam.TrimEnd(','));
+                }
+            }
+        }
+
+        private void clearBtn_Click(object sender, EventArgs e)
+        {
+            searchTextBox.Clear();
+            LoadFiles();
         }
     }
 }

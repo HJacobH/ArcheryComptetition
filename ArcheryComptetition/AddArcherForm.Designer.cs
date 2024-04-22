@@ -40,6 +40,10 @@
             umisteniTextBox = new TextBox();
             okButton = new Button();
             stornoButton = new Button();
+            lukLabel = new Label();
+            sipLabel = new Label();
+            lukTextBox = new TextBox();
+            sipComboBox = new ComboBox();
             SuspendLayout();
             // 
             // jmenoLabel
@@ -124,9 +128,9 @@
             // 
             // okButton
             // 
-            okButton.Location = new Point(21, 182);
+            okButton.Location = new Point(12, 236);
             okButton.Name = "okButton";
-            okButton.Size = new Size(75, 23);
+            okButton.Size = new Size(84, 32);
             okButton.TabIndex = 10;
             okButton.Text = "OK";
             okButton.UseVisualStyleBackColor = true;
@@ -134,19 +138,56 @@
             // 
             // stornoButton
             // 
-            stornoButton.Location = new Point(130, 182);
+            stornoButton.Location = new Point(118, 236);
             stornoButton.Name = "stornoButton";
-            stornoButton.Size = new Size(75, 23);
+            stornoButton.Size = new Size(84, 32);
             stornoButton.TabIndex = 11;
             stornoButton.Text = "Storno";
             stornoButton.UseVisualStyleBackColor = true;
             stornoButton.Click += stornoButton_Click;
             // 
+            // lukLabel
+            // 
+            lukLabel.AutoSize = true;
+            lukLabel.Location = new Point(40, 169);
+            lukLabel.Name = "lukLabel";
+            lukLabel.Size = new Size(29, 15);
+            lukLabel.TabIndex = 12;
+            lukLabel.Text = "Luk:";
+            // 
+            // sipLabel
+            // 
+            sipLabel.AutoSize = true;
+            sipLabel.Location = new Point(40, 198);
+            sipLabel.Name = "sipLabel";
+            sipLabel.Size = new Size(26, 15);
+            sipLabel.TabIndex = 13;
+            sipLabel.Text = "Sip:";
+            // 
+            // lukTextBox
+            // 
+            lukTextBox.Location = new Point(84, 166);
+            lukTextBox.Name = "lukTextBox";
+            lukTextBox.Size = new Size(100, 23);
+            lukTextBox.TabIndex = 14;
+            // 
+            // sipComboBox
+            // 
+            sipComboBox.FormattingEnabled = true;
+            sipComboBox.Location = new Point(81, 198);
+            sipComboBox.Name = "sipComboBox";
+            sipComboBox.Size = new Size(103, 23);
+            sipComboBox.TabIndex = 15;
+            // 
             // AddArcherForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(217, 228);
+            ClientSize = new Size(217, 280);
+            Controls.Add(sipComboBox);
+            Controls.Add(lukTextBox);
+            Controls.Add(sipLabel);
+            Controls.Add(lukLabel);
             Controls.Add(stornoButton);
             Controls.Add(okButton);
             Controls.Add(umisteniTextBox);
@@ -179,5 +220,9 @@
         private TextBox umisteniTextBox;
         private Button okButton;
         private Button stornoButton;
+        private Label lukLabel;
+        private Label sipLabel;
+        private TextBox lukTextBox;
+        private ComboBox sipComboBox;
     }
 }

@@ -34,15 +34,18 @@
             addButton = new Button();
             editButton = new Button();
             removeButton = new Button();
+            searchBtn = new Button();
+            clearBtn = new Button();
+            searchTextBox = new TextBox();
             SuspendLayout();
             // 
             // archerListBox
             // 
             archerListBox.FormattingEnabled = true;
             archerListBox.ItemHeight = 15;
-            archerListBox.Location = new Point(12, 49);
+            archerListBox.Location = new Point(12, 64);
             archerListBox.Name = "archerListBox";
-            archerListBox.Size = new Size(306, 379);
+            archerListBox.Size = new Size(547, 364);
             archerListBox.TabIndex = 0;
             // 
             // nazevLabel
@@ -56,7 +59,7 @@
             // 
             // backBtn
             // 
-            backBtn.Location = new Point(324, 405);
+            backBtn.Location = new Point(565, 405);
             backBtn.Name = "backBtn";
             backBtn.Size = new Size(75, 23);
             backBtn.TabIndex = 2;
@@ -66,7 +69,7 @@
             // 
             // addButton
             // 
-            addButton.Location = new Point(324, 49);
+            addButton.Location = new Point(565, 75);
             addButton.Name = "addButton";
             addButton.Size = new Size(75, 23);
             addButton.TabIndex = 3;
@@ -76,7 +79,7 @@
             // 
             // editButton
             // 
-            editButton.Location = new Point(324, 78);
+            editButton.Location = new Point(565, 104);
             editButton.Name = "editButton";
             editButton.Size = new Size(75, 23);
             editButton.TabIndex = 4;
@@ -86,7 +89,7 @@
             // 
             // removeButton
             // 
-            removeButton.Location = new Point(324, 107);
+            removeButton.Location = new Point(565, 133);
             removeButton.Name = "removeButton";
             removeButton.Size = new Size(75, 23);
             removeButton.TabIndex = 5;
@@ -94,11 +97,41 @@
             removeButton.UseVisualStyleBackColor = true;
             removeButton.Click += removeButton_Click;
             // 
+            // searchBtn
+            // 
+            searchBtn.Location = new Point(162, 35);
+            searchBtn.Name = "searchBtn";
+            searchBtn.Size = new Size(75, 23);
+            searchBtn.TabIndex = 6;
+            searchBtn.Text = "Search";
+            searchBtn.UseVisualStyleBackColor = true;
+            searchBtn.Click += searchBtn_Click;
+            // 
+            // clearBtn
+            // 
+            clearBtn.Location = new Point(243, 35);
+            clearBtn.Name = "clearBtn";
+            clearBtn.Size = new Size(75, 23);
+            clearBtn.TabIndex = 7;
+            clearBtn.Text = "Clear";
+            clearBtn.UseVisualStyleBackColor = true;
+            clearBtn.Click += clearBtn_Click;
+            // 
+            // searchTextBox
+            // 
+            searchTextBox.Location = new Point(12, 35);
+            searchTextBox.Name = "searchTextBox";
+            searchTextBox.Size = new Size(144, 23);
+            searchTextBox.TabIndex = 8;
+            // 
             // ArcherForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(411, 450);
+            ClientSize = new Size(652, 450);
+            Controls.Add(searchTextBox);
+            Controls.Add(clearBtn);
+            Controls.Add(searchBtn);
             Controls.Add(removeButton);
             Controls.Add(editButton);
             Controls.Add(addButton);
@@ -119,5 +152,8 @@
         private Button addButton;
         private Button editButton;
         private Button removeButton;
+        private Button searchBtn;
+        private Button clearBtn;
+        private TextBox searchTextBox;
     }
 }
